@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <title>Wordlet - Resultado</title>
+
+    <!-- PWA Meta Tags -->
+    <meta
+      name="description"
+      content="Resultado de juego Wordlet con tiempo y estadísticas."
+    />
+    <meta name="theme-color" content="#6aaa64" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="Wordlet Resultado" />
+
+    <!-- Anti-Cache Headers -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <!-- Icons -->
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏆</text></svg>"
+    />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles/main.css" id="mainCSS" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Manifest -->
+    <link rel="manifest" href="manifest.json" />
+    
+    <script>
+      // Anti-cache para recursos
+      window.CACHE_BUSTER = Date.now();
+      
+      // Forzar recarga del CSS
+      document.addEventListener('DOMContentLoaded', function() {
+        const cssLink = document.getElementById('mainCSS');
+        if (cssLink) {
+          cssLink.href = cssLink.href.split('?')[0] + '?v=' + window.CACHE_BUSTER;
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <h1 class="title">🏆 Resultado Wordlet</h1>
+        <p class="subtitle">Resultado compartido con tiempo</p>
+
+      </header>
+
+      <main class="result-container">
+        <!-- Información del resultado -->
+        <div class="result-info" id="resultInfo">
+          <div class="result-card">
+            <div class="result-header">
+              <h2 id="resultTitle">Cargando resultado...</h2>
+              <div class="result-status" id="resultStatus"></div>
+            </div>
+            
+            <div class="result-stats">
+              <div class="stat-item">
+                <div class="stat-number" id="timeResult">--:--</div>
+                <div class="stat-label">Tiempo</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-number" id="attemptsResult">-/-</div>
+                <div class="stat-label">Intentos</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-number" id="wordLengthResult">-</div>
+                <div class="stat-label">Letras</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-number" id="difficultyResult">Normal</div>
+                <div class="stat-label">Dificultad</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tablero de resultado -->
+        <div class="result-board-container">
+          <h3>📋 Tablero Final</h3>
+          <div class="result-board" id="resultBoard">
+            <!-- El tablero se generará aquí -->
+          </div>
+        </div>
+
+        <!-- Resultado visual con emojis -->
+        <div class="result-visual">
+          <h3>📱 Resultado Visual</h3>
+          <div class="emoji-result" id="emojiResult">
+            <!-- Los emojis se generarán aquí -->
+          </div>
+          <!--
+          <button class="btn btn-secondary" id="copyEmojiBtn">
+            📋 Copiar Resultado
+          </button>
+        -->
+        </div>
+
+        <!-- Acciones -->
+        <!-- 
+        <div class="result-actions">
+          <div class="action-group">
+            <h3>🎮 Acciones</h3>
+            <div class="button-group">
+              <button class="btn btn-primary" id="playAgainBtn">
+                🔄 Jugar la Misma Palabra
+              </button>
+              <button class="btn btn-secondary" id="shareResultBtn">
+                📤 Compartir Este Resultado
+              </button>
+              <button class="btn btn-secondary" id="newGameBtn">
+                🎯 Nuevo Juego
+              </button>
+            </div>
+          </div>
+        </div>
+      -->
+        <!-- Información adicional -->
+        <div class="result-details" id="resultDetails">
+          <div class="details-card">
+            <h3>📊 Detalles del Juego</h3>
+            <div class="detail-item">
+              <span class="detail-label">Fecha:</span>
+              <span class="detail-value" id="gameDate">--</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Palabra:</span>
+              <span class="detail-value" id="targetWord">****</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Modo:</span>
+              <span class="detail-value" id="gameMode">Normal</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Estado:</span>
+              <span class="detail-value" id="gameState">--</span>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Modal de error -->
+      <div class="modal" id="errorModal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2>⚠️ Error</h2>
+          </div>
+          <div class="modal-body">
+            <p id="errorMessage">No se pudo cargar el resultado.</p>
+            <p>Verifica que la URL sea correcta o genera un nuevo resultado.</p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary" id="goToIndexBtn">
+              🎮 Ir a Inicio
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cargar scripts de forma síncrona -->
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/resultado.js"></script>
+    
+    <script>
+      // Función de depuración para probar decodificación
+      window.debugResultDecode = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const encodedData = urlParams.get('data');
+        console.log('🔍 DEBUG RESULTADO');
+        console.log('Datos codificados:', encodedData);
+        
+        if (encodedData) {
+          try {
+            // Decodificar URL encoding primero
+            const urlDecoded = decodeURIComponent(encodedData);
+            console.log('URL decodificado:', urlDecoded);
+            
+            // Luego decodificar Base64
+            const base64Decoded = atob(urlDecoded);
+            console.log('Base64 decodificado:', base64Decoded);
+            
+            // Parsear JSON
+            const jsonData = JSON.parse(base64Decoded);
+            console.log('JSON parseado:', jsonData);
+            
+            return jsonData;
+          } catch (error) {
+            console.error('Error decodificando resultado:', error);
+            return null;
+          }
+        }
+        return null;
+      };
+      
+      // Ejecutar debug automáticamente
+      setTimeout(() => {
+        console.log('🚀 Ejecutando debug de resultado...');
+        window.debugResultDecode();
+      }, 1000);
+    </script>
+  </body>
+</html>

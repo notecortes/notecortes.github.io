@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <title>Wordlet - Configurar Juego</title>
+
+    <!-- PWA Meta Tags -->
+    <meta
+      name="description"
+      content="Configura tu juego de palabras estilo Wordle en español."
+    />
+    <meta name="theme-color" content="#6aaa64" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="Wordlet" />
+
+    <!-- Anti-Cache Headers -->
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <!-- Icons -->
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>"
+    />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles/main.css" id="mainCSS" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Manifest -->
+    <link rel="manifest" href="manifest.json" />
+
+    <script>
+      // Anti-cache para recursos
+      window.CACHE_BUSTER = Date.now();
+
+      // Forzar recarga del CSS
+      document.addEventListener("DOMContentLoaded", function () {
+        const cssLink = document.getElementById("mainCSS");
+        if (cssLink) {
+          cssLink.href =
+            cssLink.href.split("?")[0] + "?v=" + window.CACHE_BUSTER;
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <h1 class="title">🎯 Wordlet</h1>
+        <p class="subtitle">Configura tu juego de palabras</p>
+        <div class="header-actions">
+          <a href="batch.html" class="btn btn-secondary"
+            >📋 Generador por Lotes</a
+          >
+        </div>
+      </header>
+
+      <main class="config-container">
+        <div class="config-card">
+          <h2>Configuración del Juego</h2>
+
+          <form class="config-form" id="configForm">
+            <div class="setting-group">
+              <label for="wordInput">Palabra objetivo:</label>
+              <input
+                type="text"
+                id="wordInput"
+                placeholder="Ej: SOL, GATOS, PYTHON, JAVASCRIPT..."
+                maxlength="12"
+                required
+              />
+              <small>Entre 3 y 12 letras</small>
+            </div>
+
+            <div class="setting-group">
+              <label for="attemptsSelect">Número de intentos:</label>
+              <select id="attemptsSelect">
+                <option value="4">4 intentos</option>
+                <option value="5">5 intentos</option>
+                <option value="6" selected>6 intentos</option>
+                <option value="7">7 intentos</option>
+                <option value="8">8 intentos</option>
+              </select>
+            </div>
+
+            <div class="setting-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="hardModeCheck" />
+                <span class="checkmark"></span>
+                Modo difícil
+                <small>Debes usar todas las pistas reveladas</small>
+              </label>
+            </div>
+
+            <div class="button-group">
+              <button type="button" class="btn btn-secondary" id="playAloneBtn">
+                🎮 Jugar Solo
+              </button>
+              <button type="submit" class="btn btn-primary" id="generateBtn">
+                📱 Generar para Compartir
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Sección QR (oculta inicialmente) -->
+        <div class="qr-section" id="qrSection">
+          <div class="qr-container">
+            <h3>🎮 Juego Multijugador</h3>
+            <p>Comparte este código QR para que otros puedan jugar:</p>
+            <div class="qr-code" id="qrCode"></div>
+            <div class="game-url">
+              <p>O comparte este enlace:</p>
+              <a href="#" id="gameUrl" target="_blank" rel="noopener"></a>
+            </div>
+            <div class="button-group">
+              <button class="btn btn-secondary" id="copyUrlBtn">
+                📋 Copiar Enlace
+              </button>
+              <button class="btn btn-primary" id="playNowBtn">
+                🎮 Jugar Ahora
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer class="footer">
+        <p>Wordlet - Juego de palabras en español</p>
+      </footer>
+    </div>
+
+    <!-- Cargar scripts de forma síncrona con cache buster -->
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/index.js"></script>
+
+    <script>
+      // Cache buster simple solo para CSS
+      document.addEventListener("DOMContentLoaded", function () {
+        const cssLink = document.getElementById("mainCSS");
+        if (cssLink) {
+          cssLink.href = cssLink.href.split("?")[0] + "?v=" + Date.now();
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <title>Wordlet - Generador por Lotes</title>
+
+    <!-- PWA Meta Tags -->
+    <meta
+      name="description"
+      content="Genera múltiples juegos de Wordlet de una vez con códigos QR y enlaces."
+    />
+    <meta name="theme-color" content="#6aaa64" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="Wordlet Batch" />
+
+    <!-- Anti-Cache Headers -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <!-- Icons -->
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📋</text></svg>"
+    />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles/main.css" id="mainCSS" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Manifest -->
+    <link rel="manifest" href="manifest.json" />
+    
+    <script>
+      // Anti-cache para recursos
+      window.CACHE_BUSTER = Date.now();
+      
+      // Forzar recarga del CSS
+      document.addEventListener('DOMContentLoaded', function() {
+        const cssLink = document.getElementById('mainCSS');
+        if (cssLink) {
+          cssLink.href = cssLink.href.split('?')[0] + '?v=' + window.CACHE_BUSTER;
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <h1 class="title">📋 Wordlet Batch</h1>
+        <p class="subtitle">Generador de múltiples juegos</p>
+        <div class="header-actions">
+          <a href="ayuda.html" class="btn btn-secondary">❓ Cómo Jugar</a>
+          <a href="palabra.html" class="btn btn-secondary">⚙️ Juego Individual</a>
+        </div>
+      </header>
+
+      <main class="batch-container">
+        <div class="batch-config">
+          <div class="config-card">
+            <h2>Configuración por Lotes</h2>
+            
+            <form class="batch-form" id="batchForm">
+              <div class="setting-group">
+                <label for="wordsInput">Lista de palabras:</label>
+                <textarea
+                  id="wordsInput"
+                  placeholder="Ingresa las palabras separadas por líneas o comas:&#10;&#10;SOL&#10;GATOS&#10;PYTHON&#10;JAVASCRIPT&#10;PROGRAMACION"
+                  rows="8"
+                  required
+                ></textarea>
+                <small>Una palabra por línea o separadas por comas</small>
+              </div>
+
+              <div class="settings-row">
+                <div class="setting-group">
+                  <label for="batchAttemptsSelect">Intentos por defecto:</label>
+                  <select id="batchAttemptsSelect">
+                    <option value="4">4 intentos</option>
+                    <option value="5">5 intentos</option>
+                    <option value="6" selected>6 intentos</option>
+                    <option value="7">7 intentos</option>
+                    <option value="8">8 intentos</option>
+                  </select>
+                </div>
+
+                <div class="setting-group">
+                  <label class="checkbox-label">
+                    <input type="checkbox" id="batchHardModeCheck" />
+                    <span class="checkmark"></span>
+                    Modo difícil por defecto
+                  </label>
+                </div>
+              </div>
+
+              <div class="setting-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="autoAttemptsCheck" />
+                  <span class="checkmark"></span>
+                  Ajustar intentos automáticamente
+                  <small>Más intentos para palabras más largas</small>
+                </label>
+              </div>
+
+              <div class="button-group">
+                <button type="button" class="btn btn-secondary" id="previewBtn">
+                  👁️ Vista Previa
+                </button>
+                <button type="submit" class="btn btn-primary" id="generateAllBtn">
+                  🚀 Generar Todos
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Sección de resultados -->
+        <div class="batch-results" id="batchResults">
+          <div class="results-header">
+            <h3>Juegos Generados</h3>
+            <div class="results-actions">
+              <button class="btn btn-secondary" id="copyAllUrlsBtn">
+                📋 Copiar Todas las URLs
+              </button>
+              <button class="btn btn-secondary" id="downloadQRsBtn">
+                💾 Descargar QRs
+              </button>
+              <button class="btn btn-primary" id="printAllBtn">
+                🖨️ Imprimir Todo
+              </button>
+            </div>
+          </div>
+          
+          <div class="results-grid" id="resultsGrid">
+            <!-- Los resultados se generarán aquí -->
+          </div>
+        </div>
+
+        <!-- Sección de estadísticas -->
+        <div class="batch-stats" id="batchStats">
+          <div class="stats-card">
+            <h3>📊 Estadísticas</h3>
+            <div class="stats-grid">
+              <div class="stat-item">
+                <div class="stat-number" id="totalGames">0</div>
+                <div class="stat-label">Juegos</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-number" id="validWords">0</div>
+                <div class="stat-label">Válidas</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-number" id="invalidWords">0</div>
+                <div class="stat-label">Inválidas</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-number" id="avgLength">0</div>
+                <div class="stat-label">Long. Media</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Modal de vista previa -->
+      <div class="modal" id="previewModal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2>👁️ Vista Previa</h2>
+            <button class="close-btn" id="closePreviewModal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div id="previewContent"></div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" id="cancelPreviewBtn">
+              Cancelar
+            </button>
+            <button class="btn btn-primary" id="confirmGenerateBtn">
+              🚀 Generar Todos
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal de progreso -->
+      <div class="modal" id="progressModal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2>⏳ Generando Juegos...</h2>
+          </div>
+          <div class="modal-body">
+            <div class="progress-container">
+              <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+              </div>
+              <div class="progress-text">
+                <span id="progressText">Preparando...</span>
+                <span id="progressPercent">0%</span>
+              </div>
+            </div>
+            <div class="progress-details" id="progressDetails">
+              Iniciando generación...
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cargar scripts de forma síncrona -->
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/batch.js"></script>
+    
+    <script>
+      // Función de depuración para batch
+      window.debugBatch = function() {
+        console.log('🔍 DEBUG BATCH');
+        console.log('CONFIG disponible:', typeof CONFIG !== 'undefined');
+        console.log('Utils disponible:', typeof Utils !== 'undefined');
+        console.log('BatchManager disponible:', typeof BatchManager !== 'undefined');
+        
+        // Probar validación de palabras
+        const testWords = ['HOLA', 'GATO', 'PYTHON', 'JAVASCRIPT'];
+        testWords.forEach(word => {
+          console.log(`Palabra "${word}" es válida:`, Utils.isValidWord(word));
+        });
+      };
+      
+      // Ejecutar debug automáticamente
+      setTimeout(() => {
+        console.log('🚀 Ejecutando debug de batch...');
+        window.debugBatch();
+      }, 1000);
+    </script>
+  </body>
+</html>

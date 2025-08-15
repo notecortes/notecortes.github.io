@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <title>Wordlet - Cómo Jugar</title>
+
+    <!-- PWA Meta Tags -->
+    <meta
+      name="description"
+      content="Aprende a jugar Wordlet - Tutorial completo con ejemplos."
+    />
+    <meta name="theme-color" content="#6aaa64" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="Wordlet Ayuda" />
+
+    <!-- Anti-Cache Headers -->
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <!-- Icons -->
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❓</text></svg>"
+    />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles/main.css" id="mainCSS" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Manifest -->
+    <link rel="manifest" href="manifest.json" />
+
+    <style>
+      /* Estilos específicos para la página de ayuda */
+      .help-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .help-section {
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 24px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        color: #333; /* Texto oscuro por defecto */
+      }
+
+      .help-section h2 {
+        color: #6aaa64;
+        margin-bottom: 16px;
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .help-section h3 {
+        color: #333;
+        margin: 20px 0 12px 0;
+        font-size: 1.2rem;
+      }
+
+      .help-section p {
+        color: #333;
+        line-height: 1.6;
+        margin-bottom: 12px;
+      }
+
+      .help-section ul {
+        color: #333;
+        line-height: 1.6;
+      }
+
+      .help-section li {
+        color: #333;
+        margin-bottom: 8px;
+      }
+
+      .example-board {
+        display: grid;
+        gap: 4px;
+        margin: 16px 0;
+        justify-content: center;
+      }
+
+      .example-board.word-4 {
+        grid-template-columns: repeat(4, 50px);
+      }
+
+      .example-board.word-5 {
+        grid-template-columns: repeat(5, 50px);
+      }
+
+      .example-tile {
+        width: 50px;
+        height: 50px;
+        border: 2px solid #d3d6da;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 1.2rem;
+        border-radius: 4px;
+        background: white;
+      }
+
+      .example-tile.correct {
+        background: #6aaa64;
+        color: white;
+        border-color: #6aaa64;
+      }
+
+      .example-tile.present {
+        background: #c9b458;
+        color: white;
+        border-color: #c9b458;
+      }
+
+      .example-tile.absent {
+        background: #787c7e;
+        color: white;
+        border-color: #787c7e;
+      }
+
+      .example-tile.empty {
+        background: #f8f9fa;
+        border-color: #e9ecef;
+      }
+
+      .color-legend {
+        display: flex;
+        gap: 16px;
+        margin: 16px 0;
+        flex-wrap: wrap;
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .legend-color {
+        width: 24px;
+        height: 24px;
+        border-radius: 4px;
+        border: 2px solid;
+      }
+
+      .legend-color.correct {
+        background: #6aaa64;
+        border-color: #6aaa64;
+      }
+
+      .legend-color.present {
+        background: #c9b458;
+        border-color: #c9b458;
+      }
+
+      .legend-color.absent {
+        background: #787c7e;
+        border-color: #787c7e;
+      }
+
+      .step-by-step {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 16px;
+        margin: 16px 0;
+      }
+
+      .step {
+        margin-bottom: 16px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid #e9ecef;
+      }
+
+      .step:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+
+      .step-number {
+        background: #6aaa64;
+        color: white;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        margin-right: 8px;
+      }
+
+      .tips-list {
+        list-style: none;
+        padding: 0;
+      }
+
+      .tips-list li {
+        background: #e8f5e8;
+        margin: 8px 0;
+        padding: 12px;
+        border-radius: 8px;
+        border-left: 4px solid #6aaa64;
+      }
+
+      .tips-list li::before {
+        content: "💡";
+        margin-right: 8px;
+      }
+
+      .keyboard-example {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin: 16px 0;
+        align-items: center;
+      }
+
+      .keyboard-row {
+        display: flex;
+        gap: 4px;
+      }
+
+      .key-example {
+        padding: 8px 12px;
+        border: 2px solid #d3d6da;
+        border-radius: 4px;
+        background: white;
+        font-weight: bold;
+        min-width: 32px;
+        text-align: center;
+        font-size: 0.9rem;
+      }
+
+      .key-example.correct {
+        background: #6aaa64;
+        color: white;
+        border-color: #6aaa64;
+      }
+
+      .key-example.present {
+        background: #c9b458;
+        color: white;
+        border-color: #c9b458;
+      }
+
+      .key-example.absent {
+        background: #787c7e;
+        color: white;
+        border-color: #787c7e;
+      }
+
+      .key-example.wide {
+        min-width: 60px;
+        font-size: 0.8rem;
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        margin-top: 32px;
+        flex-wrap: wrap;
+      }
+
+      @media (max-width: 768px) {
+        .help-container {
+          padding: 12px;
+        }
+
+        .help-section {
+          padding: 16px;
+        }
+
+        .example-tile {
+          width: 40px;
+          height: 40px;
+          font-size: 1rem;
+        }
+
+        .example-board.word-4 {
+          grid-template-columns: repeat(4, 40px);
+        }
+
+        .example-board.word-5 {
+          grid-template-columns: repeat(5, 40px);
+        }
+
+        .color-legend {
+          justify-content: center;
+        }
+
+        .action-buttons {
+          flex-direction: column;
+          align-items: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <h1 class="title"> ¿ Cómo Jugar Wordlet ?</h1>
+        
+
+      </header>
+
+      <main class="help-container">
+        <!-- Objetivo del juego -->
+        <div class="help-section">
+            <p class="subtitle">Aprende las reglas y estrategias del juego</p>
+        </div>
+        <div class="help-section">
+            
+          <h2>🎯 Objetivo del Juego</h2>
+          <p>
+            <strong>Wordlet</strong> es un juego de palabras donde debes
+            adivinar una palabra secreta en un número limitado de intentos. Cada
+            intento te dará pistas sobre qué letras están en la palabra y en qué
+            posición.
+          </p>
+          <ul>
+            <li>
+              🔤 <strong>Adivina la palabra secreta</strong> en 6 intentos (o
+              menos)
+            </li>
+            <li>
+              📝 <strong>Cada intento debe ser una palabra válida</strong> de 3
+              a 12 letras
+            </li>
+            <li>
+              🎨 <strong>Los colores te darán pistas</strong> después de cada
+              intento
+            </li>
+          </ul>
+        </div>
+
+        <!-- Cómo interpretar los colores -->
+        <div class="help-section">
+          <h2>🎨 Significado de los Colores</h2>
+          <p>
+            Después de cada intento, las letras cambiarán de color para darte
+            pistas:
+          </p>
+
+          <div class="color-legend">
+            <div class="legend-item">
+              <div class="legend-color correct"></div>
+              <span
+                ><strong>Verde:</strong> Letra correcta en posición
+                correcta</span
+              >
+            </div>
+            <div class="legend-item">
+              <div class="legend-color present"></div>
+              <span
+                ><strong>Amarillo:</strong> Letra correcta en posición
+                incorrecta</span
+              >
+            </div>
+            <div class="legend-item">
+              <div class="legend-color absent"></div>
+              <span><strong>Gris:</strong> Letra no está en la palabra</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ejemplo paso a paso -->
+        <div class="help-section">
+          <h2>📚 Ejemplo Paso a Paso</h2>
+          <p>
+            Veamos un ejemplo completo jugando con la palabra secreta
+            <strong>"GATOS"</strong>:
+          </p>
+
+          <div class="step-by-step">
+            <div class="step">
+              <h3><span class="step-number">1</span>Primer Intento: "HOLAS"</h3>
+              <div class="example-board word-5">
+                <div class="example-tile absent">H</div>
+                <div class="example-tile absent">O</div>
+                <div class="example-tile absent">L</div>
+                <div class="example-tile present">A</div>
+                <div class="example-tile present">S</div>
+              </div>
+              <p>
+                ❌ <strong>H, O, L</strong> no están en la palabra<br />
+                🟨 <strong>A</strong> está en la palabra pero no en posición
+                4<br />
+                🟨 <strong>S</strong> está en la palabra pero no en posición 5
+              </p>
+            </div>
+
+            <div class="step">
+              <h3>
+                <span class="step-number">2</span>Segundo Intento: "SALTA"
+              </h3>
+              <div class="example-board word-5">
+                <div class="example-tile absent">S</div>
+                <div class="example-tile present">A</div>
+                <div class="example-tile absent">L</div>
+                <div class="example-tile present">T</div>
+                <div class="example-tile present">A</div>
+              </div>
+              <p>
+                ❌ <strong>S, L</strong> no están en la posición correcta<br />
+                🟨 <strong>A</strong> está en la palabra pero no en posición
+                2<br />
+                🟨 <strong>T</strong> está en la palabra pero no en posición
+                4<br />
+                🟨 <strong>A</strong> (segunda) también está mal ubicada
+              </p>
+            </div>
+
+            <div class="step">
+              <h3><span class="step-number">3</span>Tercer Intento: "GATOS"</h3>
+              <div class="example-board word-5">
+                <div class="example-tile correct">G</div>
+                <div class="example-tile correct">A</div>
+                <div class="example-tile correct">T</div>
+                <div class="example-tile correct">O</div>
+                <div class="example-tile correct">S</div>
+              </div>
+              <p>
+                🎉 <strong>¡Perfecto!</strong> Todas las letras están en la
+                posición correcta.<br />
+                ✅ ¡Has ganado el juego!
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Teclado virtual -->
+        <div class="help-section">
+          <h2>⌨️ Teclado Virtual</h2>
+          <p>
+            El teclado también cambia de color para ayudarte a recordar qué
+            letras has probado:
+          </p>
+
+          <div class="keyboard-example">
+            <div class="keyboard-row">
+              <div class="key-example">Q</div>
+              <div class="key-example">W</div>
+              <div class="key-example">E</div>
+              <div class="key-example">R</div>
+              <div class="key-example correct">T</div>
+              <div class="key-example">Y</div>
+              <div class="key-example">U</div>
+              <div class="key-example">I</div>
+              <div class="key-example absent">O</div>
+              <div class="key-example">P</div>
+            </div>
+            <div class="keyboard-row">
+              <div class="key-example correct">A</div>
+              <div class="key-example correct">S</div>
+              <div class="key-example">D</div>
+              <div class="key-example">F</div>
+              <div class="key-example correct">G</div>
+              <div class="key-example absent">H</div>
+              <div class="key-example">J</div>
+              <div class="key-example">K</div>
+              <div class="key-example absent">L</div>
+              <div class="key-example">Ñ</div>
+            </div>
+            <div class="keyboard-row">
+              <div class="key-example wide">ENTER</div>
+              <div class="key-example">Z</div>
+              <div class="key-example">X</div>
+              <div class="key-example">C</div>
+              <div class="key-example">V</div>
+              <div class="key-example">B</div>
+              <div class="key-example">N</div>
+              <div class="key-example">M</div>
+              <div class="key-example wide">⌫</div>
+            </div>
+          </div>
+
+          <p>
+            🟩 <strong>Verde:</strong> Letras que están en la posición
+            correcta<br />
+            🟨 <strong>Amarillo:</strong> Letras que están en la palabra pero
+            mal ubicadas<br />
+            ⬛ <strong>Gris:</strong> Letras que no están en la palabra
+          </p>
+        </div>
+
+        <!-- Modo Difícil -->
+        <div class="help-section">
+          <h2>🔥 Modo Difícil</h2>
+          <p>
+            En el modo difícil, debes usar todas las pistas que has descubierto:
+          </p>
+          <ul>
+            <li>
+              ✅ <strong>Letras verdes</strong> deben mantenerse en la misma
+              posición
+            </li>
+            <li>
+              🟨 <strong>Letras amarillas</strong> deben incluirse en tu
+              siguiente intento
+            </li>
+            <li>❌ <strong>Letras grises</strong> no pueden usarse de nuevo</li>
+          </ul>
+          <p>
+            <strong>Ejemplo:</strong> Si descubres que la letra "A" está en
+            posición 2 (verde), todos tus siguientes intentos deben tener "A" en
+            esa posición.
+          </p>
+        </div>
+
+        <!-- Consejos y estrategias -->
+        <div class="help-section">
+          <h2>💡 Consejos y Estrategias</h2>
+          <ul class="tips-list">
+            <li>
+              <strong>Empieza con palabras comunes</strong> que tengan vocales
+              variadas como "AUDIO", "PIANO" o "MEDIA"
+            </li>
+            <li>
+              <strong>Usa las consonantes frecuentes</strong> como R, S, T, L, N
+              en tus primeros intentos
+            </li>
+            <li>
+              <strong>Presta atención a las letras amarillas</strong> - están en
+              la palabra pero necesitas encontrar su posición correcta
+            </li>
+            <li>
+              <strong>Elimina letras grises</strong> - no las uses en intentos
+              posteriores
+            </li>
+            <li>
+              <strong>Piensa en patrones comunes</strong> del español como
+              terminaciones -AR, -ER, -IR, -OS, -AS
+            </li>
+            <li>
+              <strong>No olvides la Ñ</strong> - es una letra única del español
+              que puede aparecer en las palabras
+            </li>
+          </ul>
+        </div>
+
+        <!-- Configuración del juego -->
+        <!-- <div class="help-section">
+          <h2>⚙️ Configuración del Juego</h2>
+          <h3>Opciones Disponibles:</h3>
+          <ul>
+            <li>📏 <strong>Longitud de palabra:</strong> De 3 a 12 letras</li>
+            <li>🎯 <strong>Número de intentos:</strong> De 4 a 8 intentos</li>
+            <li>
+              🔥 <strong>Modo difícil:</strong> Activa restricciones adicionales
+            </li>
+            <li>
+              📱 <strong>Compartir:</strong> Genera códigos QR y enlaces para
+              multijugador
+            </li>
+          </ul>
+
+          <h3>Modos de Juego:</h3>
+          <ul>
+            <li>
+              🎮 <strong>Jugar Solo:</strong> Juega inmediatamente sin generar
+              enlace
+            </li>
+            <li>
+              📱 <strong>Generar para Compartir:</strong> Crea un enlace y
+              código QR para otros
+            </li>
+            <li>
+              📋 <strong>Generador por Lotes:</strong> Crea múltiples juegos a
+              la vez
+            </li>
+          </ul>
+        </div>
+    -->
+        <!-- Botones de acción -->
+        <!-- 
+        <div class="action-buttons">
+          <a href="palabra.html" class="btn btn-primary">🎮 Empezar a Jugar</a>
+          <a href="batch.html" class="btn btn-secondary"
+            >📋 Generador por Lotes</a
+          >
+        </div>
+    -->
+      </main>
+
+      <footer class="footer">
+        <p>
+          Wordlet - Juego de palabras en español
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>

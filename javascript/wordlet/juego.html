@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <title>Wordlet - Juego</title>
+
+    <!-- PWA Meta Tags -->
+    <meta
+      name="description"
+      content="Juego de palabras estilo Wordle en español."
+    />
+    <meta name="theme-color" content="#6aaa64" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="Wordlet" />
+
+    <!-- Anti-Cache Headers -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <!-- Icons -->
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>"
+    />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles/main.css" id="mainCSS" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Manifest -->
+    <link rel="manifest" href="manifest.json" />
+    
+    <script>
+      // Anti-cache para recursos
+      window.CACHE_BUSTER = Date.now();
+      
+      // Forzar recarga del CSS
+      document.addEventListener('DOMContentLoaded', function() {
+        const cssLink = document.getElementById('mainCSS');
+        if (cssLink) {
+          cssLink.href = cssLink.href.split('?')[0] + '?v=' + window.CACHE_BUSTER;
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <h1 class="title">🎯 Wordlet</h1>
+        <div class="game-info">
+          <span class="word-length" id="wordLength">5 letras</span>
+          <span class="attempts-left" id="attemptsLeft">6 intentos</span>
+          <span class="difficulty" id="difficulty"></span>
+        </div>
+      </header>
+      <div class="header-actions">
+        <a href="ayuda.html" class="btn btn-secondary">¿ Cómo Jugar ?</a>
+      </div>
+
+      <main class="game-container">
+        <div class="game-board" id="gameBoard"></div>
+        <div class="keyboard" id="keyboard"></div>
+      </main>
+
+      <!-- Modal de fin de juego -->
+      <div class="modal" id="gameOverModal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 id="gameOverTitle">¡Juego Terminado!</h2>
+          </div>
+          <div class="modal-body">
+            <p id="gameOverMessage"></p>
+            <div class="stats" id="gameStats"></div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" id="shareBtn">
+              📋 Compartir Resultado
+            </button>
+            <button class="btn btn-secondary" id="shareUrlBtn">
+              🔗 Compartir con Tiempo
+            </button>
+            <button class="btn btn-primary" id="newGameBtn">
+              🎮 Nuevo Juego
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal de error -->
+      <div class="modal" id="errorModal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2>⚠️ Error</h2>
+          </div>
+          <div class="modal-body">
+            <p id="errorMessage">No se pudo cargar el juego.</p>
+            <p>Verifica que la URL sea correcta o configura un nuevo juego.</p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary" id="goToConfigBtn">
+              ⚙️ Configurar Juego
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cargar scripts de forma síncrona -->
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/juego.js"></script>
+    
+    <script>
+      // Función de depuración para probar decodificación
+      window.debugDecode = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const encodedWord = urlParams.get('word');
+        console.log('🔍 DEBUG DECODIFICACIÓN');
+        console.log('Palabra codificada:', encodedWord);
+        
+        if (encodedWord) {
+          try {
+            const decoded = atob(encodedWord);
+            console.log('Palabra decodificada:', decoded);
+            console.log('Longitud:', decoded.length);
+            console.log('Es válida:', Utils.isValidWord(decoded));
+            return decoded;
+          } catch (error) {
+            console.error('Error decodificando:', error);
+            return null;
+          }
+        }
+        return null;
+      };
+      
+      // Ejecutar debug automáticamente
+      setTimeout(() => {
+        console.log('🚀 Ejecutando debug automático...');
+        window.debugDecode();
+      }, 1000);
+    </script>
+  </body>
+</html>

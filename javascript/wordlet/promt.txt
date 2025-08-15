@@ -1,0 +1,8 @@
+Quiero hacer un programa HTML, JavaScript y CSS con flexbox. NO usar react ni node mi angular ni otras tecnologías.
+La aplicación consiste en un juego wordlet.
+Tendrá al menos dos pantallas en la primera puedes darle una palabra y otras opciones de configuración. en la segunda estará el juego para averiguar la palabra. La aplicación tendrá además un contador de tiempo empleado, y generará un código qr para que puedas jugar desde el móvil. 
+
+La aplicación debe ser apta para móvil, bonita, moderna. Refactoriza todo para que sea fácil de actualizar y modificar.
+
+
+puedes generar un qr para poder jugar mas de una persona?, ha de aparecer antes de opder jugar, Una vez se ha iniciado la partida no se puede ver las opciones para no averiguar la palabra. debajo del qr debe aparecer la url como enlace para poder abrirlo tambien
